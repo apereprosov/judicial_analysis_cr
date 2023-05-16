@@ -16,7 +16,7 @@ valid_urls = []
 print('Начинаем')
 with webdriver.Chrome(options=options) as browser:
     print('Зашел в браузер')
-    for i in range(422799,420851,-1):
+    for i in range(425550,41590,-1):
         page = url+str(i)
         browser.get(page)
         time.sleep(1)
