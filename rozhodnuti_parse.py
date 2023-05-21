@@ -42,7 +42,7 @@ def parse_page(i):
             print('Wrong url')
 
 # Creating a thread pool
-with ThreadPoolExecutor(max_workers=10) as executor:
+with ThreadPoolExecutor(max_workers=5) as executor:
     # Start parsing for each value of i
     executor.map(parse_page, range(425550, 41590, -1))
 
