@@ -1,23 +1,30 @@
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import csv
 import time
+from concurrent.futures import ThreadPoolExecutor
 
-user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36'
+proxy_string = '77.73.241.154:80'
+user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'
 url = 'https://rozhodnuti.justice.cz/rozhodnuti/'
+
+
 options = webdriver.ChromeOptions()
 options.add_argument(user_agent)
 options.add_argument('--headless')
 
+options.add_argument(f'--proxy-server={proxy_string}')
+
 last_check = 41590
 
-array = ['Jednací číslo','Soud','Soudce','Identifikátor ECLI','Předmět řízení','Datum vydání','Datum zveřejnění','Klíčová slova']
+array = ['negotiation','soud','soudce','identifikátor','subject','release_date','publication_date','key_words']
 valid_urls = []
-print('Начинаем')
-with webdriver.Chrome(options=options) as browser:
-    print('Зашел в браузер')
-    for i in range(425550,41590,-1):
-        page = url+str(i)
+print('Beginning')
+
+def parse_page(i):
+    page = url+str(i)
+    with webdriver.Chrome(options=options) as browser:
         browser.get(page)
         time.sleep(1)
         if browser.find_element(By.ID,'bodyDiv').text not in ['Omlouváme se, při načítání rozhodnutí došlo k chybě...','K zobrazení tohoto rozhodnutí nemáte oprávnění.']:
@@ -30,10 +37,16 @@ with webdriver.Chrome(options=options) as browser:
                 array.append(output)
                 print(f'{i} success')
             except:
-                continue
+                return
         else:
             print('Wrong url')
 
+# Creating a thread pool
+with ThreadPoolExecutor(max_workers=10) as executor:
+    # Start parsing for each value of i
+    executor.map(parse_page, range(425550, 41590, -1))
+
+# Saving data to CSV files
 with open('output.csv','w',newline='') as file:
     writer = csv.writer(file)
     writer.writerows(array)
