@@ -5,7 +5,6 @@ import csv
 import time
 from concurrent.futures import ThreadPoolExecutor
 
-proxy_string = '77.73.241.154:80'
 user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'
 url = 'https://rozhodnuti.justice.cz/rozhodnuti/'
 
@@ -14,7 +13,6 @@ options = webdriver.ChromeOptions()
 options.add_argument(user_agent)
 options.add_argument('--headless')
 
-options.add_argument(f'--proxy-server={proxy_string}')
 
 last_check = 41590
 
@@ -42,7 +40,7 @@ def parse_page(i):
             print('Wrong url')
 
 # Creating a thread pool
-with ThreadPoolExecutor(max_workers=5) as executor:
+with ThreadPoolExecutor(max_workers=3) as executor:
     # Start parsing for each value of i
     executor.map(parse_page, range(425550, 41590, -1))
 
