@@ -13,7 +13,9 @@ options.add_argument('--headless')
 last_check = 41590
 
 array = ['Jednací číslo','Soud','Soudce','Identifikátor ECLI','Předmět řízení','Datum vydání','Datum zveřejnění','Klíčová slova']
-valid_urls = []
+with open('output.csv', 'a', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(array)
 print('Начинаем')
 with webdriver.Chrome(options=options) as browser:
     print('Зашел в браузер')
@@ -22,24 +24,23 @@ with webdriver.Chrome(options=options) as browser:
         browser.get(page)
         time.sleep(1)
         if browser.find_element(By.ID,'bodyDiv').text not in ['Omlouváme se, při načítání rozhodnutí došlo k chybě...','K zobrazení tohoto rozhodnutí nemáte oprávnění.']:
-            valid_urls.append(page)
             try:
                 decision = browser.find_element(By.XPATH, "/html/body/div[1]/div/div/div/div/div[3]/div/div/p[6]").text
                 output = [row.text for row in browser.find_elements(By.TAG_NAME,'dd')][:-2]
                 output.append(decision)
                 output = tuple(output)
-                array.append(output)
                 print(f'{i} success')
+                
+                with open('output.csv', 'a', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(output)
+                with open('links.csv','a',newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(page)
+
             except:
                 continue
         else:
             print('Wrong url')
         time.sleep(random.randint(1,2))
 
-with open('output.csv','w',newline='') as file:
-    writer = csv.writer(file)
-    writer.writerows(array)
-
-with open('links.csv','w',newline='') as file:
-    writer = csv.writer(file)
-    writer.writerows(valid_urls)
