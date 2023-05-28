@@ -12,7 +12,6 @@ options.add_argument('--headless')
 
 last_check = 41590
 
-last_stop = 387764
 
 array = ['Jednací číslo','Soud','Soudce','Identifikátor ECLI','Předmět řízení','Datum vydání','Datum zveřejnění','Klíčová slova','Text']
 with open('output.csv', 'a', newline='') as file:
@@ -21,7 +20,7 @@ with open('output.csv', 'a', newline='') as file:
 print('Начинаем')
 with webdriver.Chrome(options=options) as browser:
     print('Зашел в браузер')
-    for i in range(last_stop,41590,-1):
+    for i in range(425550,41590,-1):
         page = url+str(i)
         browser.get(page)
         time.sleep(1)
