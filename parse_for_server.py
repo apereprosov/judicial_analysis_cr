@@ -14,7 +14,7 @@ last_check = 41590
 
 last_stop = 387764
 
-array = ['Jednací číslo','Soud','Soudce','Identifikátor ECLI','Předmět řízení','Datum vydání','Datum zveřejnění','Klíčová slova']
+array = ['Jednací číslo','Soud','Soudce','Identifikátor ECLI','Předmět řízení','Datum vydání','Datum zveřejnění','Klíčová slova','Text']
 with open('output.csv', 'a', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(array)
