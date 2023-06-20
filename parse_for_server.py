@@ -26,11 +26,10 @@ with webdriver.Chrome(options=options) as browser:
         if browser.find_element(By.ID,'bodyDiv').text not in ['Omlouváme se, při načítání rozhodnutí došlo k chybě...','K zobrazení tohoto rozhodnutí nemáte oprávnění.']:
             try:
                 decision = browser.find_element(By.XPATH, "/html/body/div[1]/div/div/div/div/div[3]/div/div/p[6]").text
-                output = [row.text for row in browser.find_elements(By.TAG_NAME,'dd')][:-2]
+                output = [row.text for row in browser.find_elements(By.TAG_NAME,'dd')]
                 output.append(decision)
                 output = tuple(output)
-                print(f'{i} success')
-                
+                print(i,output)                
                 with open('output.csv', 'a', newline='') as file:
                     writer = csv.writer(file)
                     writer.writerow(output)
