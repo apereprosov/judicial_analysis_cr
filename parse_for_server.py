@@ -11,13 +11,15 @@ options.add_argument(user_agent)
 options.add_argument('--headless')
 
 last_check = 41590
-
 last_stop = 387764
+
+start_from = int(input())
+end_on = int(input())
 
 print('Beginning')
 with webdriver.Chrome(options=options) as browser:
     print('Logged into the browser')
-    for i in range(last_stop,41590,-1):
+    for i in range(start_from,end_on,-1):
         page = url+str(i)
         browser.get(page)
         time.sleep(1)
